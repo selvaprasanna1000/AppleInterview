@@ -4,12 +4,17 @@ from collections import defaultdict
 
 def reduce_clusters(c_tuple_list):
 
-    """Takes in an unordered list of c_tuples. Identifies clusters of c_tuples by overlapping area.
-    Then returns a list of c_tuples where each item in the list corresponds to one c_tuple per cluster of the highest area.
+    # Takes in an unordered list of c_tuples. Identifies clusters of c_tuples by overlapping area.
+    # Then returns a list of c_tuples where each item in the list corresponds to one c_tuple per cluster of the highest
+    # area.
+    #
+    # The length of the returned list should equal the number of clusters formed from the original c_tuple list
+    # :param c_tuple_list: A list of c_tuple definitions in the form [(x, y, r), (x, y, r), ... ]
+    # :return: A list of c_tuple definitions in the form [(x, y, r), (x, y, r), ... ]
 
-    The length of the returned list should equal the number of clusters formed from the original c_tuple list
-    :param c_tuple_list: A list of c_tuple definitions in the form [(x, y, r), (x, y, r), ... ]
-    :return: A list of c_tuple definitions in the form [(x, y, r), (x, y, r), ... ]"""
+    if not is_valid_input(c_tuple_list):
+        print("Bad Input Data")
+        return None
 
     clustered_list = cluster_overlapping_circles(c_tuple_list)
     reduced_cluster = []
@@ -21,6 +26,18 @@ def reduce_clusters(c_tuple_list):
         reduced_cluster.append(cluster[largest_circle_index])
 
     return reduced_cluster
+
+
+def is_valid_input(c_tuple_list):
+
+    for item in c_tuple_list:
+        # verify if each element is either int or float
+        if not all(isinstance(x, (int, float)) for x in item):
+            return False
+        # verify if each tuple is a tuple, consists of three numbers, and radius is positive
+        if not isinstance(item, tuple) or len(item) != 3 or item[2] < 0:
+            return False
+    return True
 
 
 def are_circles_overlapping(c_tuple1, c_tuple2):
@@ -69,6 +86,20 @@ def main():
     sample1 = [(0.5, 0.5, 0.5), (0.7, 0.7, 0.4), (4, 4, 0.7), (1.5, 1.5, 1.1)]
     sample2 = [(1.5, 1.5, 1.3), (4, 4, 0.7)]
     sample3 = [(1, 3, 0.7), (2, 3, 0.4), (3, 3, 0.9)]
+
+    # Additional Test Data
+    sample4 = []  # empty list
+    sample5 = [(0.5, 0.5, 0.5), (0.7, 0.7, 0.4), (4, 4, 0.7), (1.5, 1.5, 1.1), (0.5, 0.5, 0.5), (4, 4, 0.7), (1.5, 1.5, 1.1)]  # duplicate list
+    sample6 = [(0.5, 0.5, 0.5), (0.7, 0.7, 0.4), (4, 4, 10), (1.5, 1.5, 1.1)]  # Large all-encompassing circle
+    sample7 = [(0.5, 0.5, 0.5), (0.7, 0.7, 0.4), (4, 4, 10), (1.5, -1.5, 3)]  # Negative coordinates
+    sample12 = [(1, 1, 1), (1, 1, 2), (1, 1, 3)]  # Concentric Circles
+    sample13 = [(1, 1, 1), (-1, -1, 1), (3, 3, 1)]  # Independent Circles
+
+    # Bad Test Data
+    sample8 = [(0.5, 0.5, 0.5), (0.7, 0.7, 0.4), (4, 4, 10), (1.5, 1.5)]  # Missing radius
+    sample9 = [()]  # Missing all values
+    sample10 = [(), ()]  # Missing all values
+    sample11 = [(0.5, 0.5, 0.5), (0.7, 0.7, 0.4), (4, 4, 10), (1.5, 1.5, -4)]  # Negative radius
 
     # print the reduced clusters
     print(reduce_clusters(sample1))

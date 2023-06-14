@@ -15,5 +15,4 @@ To:
     graph = {}
     [graph.setdefault(i, []) for i in range(circle_count)]
 
-**How to Run cluster_utils.py?** 
 
