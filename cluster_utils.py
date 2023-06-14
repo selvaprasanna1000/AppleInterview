@@ -12,11 +12,15 @@ def reduce_clusters(c_tuple_list):
     # :param c_tuple_list: A list of c_tuple definitions in the form [(x, y, r), (x, y, r), ... ]
     # :return: A list of c_tuple definitions in the form [(x, y, r), (x, y, r), ... ]
 
+    # Validate the input data
     if not is_valid_input(c_tuple_list):
         print("Bad Input Data")
         return None
 
+    # Cluster the circles that are overlapping
     clustered_list = cluster_overlapping_circles(c_tuple_list)
+
+    # Reduce each cluster to save only the largest circle
     reduced_cluster = []
     for cluster in clustered_list:
         largest_circle_index = 0
@@ -31,12 +35,13 @@ def reduce_clusters(c_tuple_list):
 def is_valid_input(c_tuple_list):
 
     for item in c_tuple_list:
-        # verify if each element is either int or float
+        # Verify if each element is either int or float
         if not all(isinstance(x, (int, float)) for x in item):
             return False
-        # verify if each tuple is a tuple, consists of three numbers, and radius is positive
+        # Verify if each tuple is a tuple, consists of three numbers, and radius is positive
         if not isinstance(item, tuple) or len(item) != 3 or item[2] < 0:
             return False
+
     return True
 
 
@@ -66,6 +71,7 @@ def cluster_overlapping_circles(c_tuple_list):
     # Find the clusters by traversing the graph depth first
     visited = set()
     cluster_list = []
+
     for i in range(circle_count):
         if i not in visited:
             my_stack = [i]
